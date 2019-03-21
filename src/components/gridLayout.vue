@@ -64,6 +64,8 @@ export default {
             let key = node.key || String(idx),
                 layout = this.layoutItem(key);
 
+            if (!layout) return null;
+
             let props = {
                 colWidth: this.colWidth,
                 rowHeight: this.rowHeight,

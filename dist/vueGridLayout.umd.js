@@ -3654,15 +3654,6 @@ function moveElementAwayFromCollision(layout, collidesWith, itemToMove, isUserAc
       y = compactV ? itemToMove.y + 1 : undefined;
   return moveElement(layout, itemToMove, x, y, isUserAction, preventCollision, compactType, cols);
 }
-function cloneLayout(layout) {
-  var newLayout = Array(layout.length);
-
-  for (var i = 0, len = layout.length; i < len; i++) {
-    newLayout[i] = cloneLayoutItem(layout[i]);
-  }
-
-  return newLayout;
-}
 function debounce(func, wait, immediate) {
   var timeout;
   return function () {
@@ -3783,6 +3774,7 @@ function debounce(func, wait, immediate) {
     renderGridItem: function renderGridItem(node, idx) {
       var key = node.key || String(idx),
           layout = this.layoutItem(key);
+      if (!layout) return null;
       var props = {
         colWidth: this.colWidth,
         rowHeight: this.rowHeight,
@@ -3943,12 +3935,6 @@ var gridLayout_component = normalizeComponent(
       type: Object,
       required: true
     },
-    value: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
     compactType: {
       type: String,
       default: 'vertical'
@@ -3974,8 +3960,7 @@ var gridLayout_component = normalizeComponent(
   },
   data: function data() {
     return {
-      containerWidth: null,
-      layout: null
+      containerWidth: null
     };
   },
   created: function created() {
@@ -3986,14 +3971,13 @@ var gridLayout_component = normalizeComponent(
   },
   mounted: function mounted() {
     this.containerWidth = this.$el.offsetWidth;
-    this.layout = this.findOrGenerateLayout(this.breakpoint, this.breakpoint);
   },
   render: function render(h) {
     var _this = this;
 
     var children = [];
 
-    if (this.layout) {
+    if (this.containerWidth && this.layout) {
       var props = {
         value: this.layout,
         cols: this.cols(this.breakpoint),
@@ -4004,6 +3988,9 @@ var gridLayout_component = normalizeComponent(
         isResizable: this.isResizable
       };
       var on = {
+        'input': function input(value) {
+          return _this.$emit('layout-changed', _this.breakpoint, value);
+        },
         'item-resized': function itemResized(event) {
           return _this.$emit('item-resized', event);
         }
@@ -4028,18 +4015,11 @@ var gridLayout_component = normalizeComponent(
         return _this2.columns[breakpoint];
       };
     },
-    //layout() {
-    //    let layout = findOrGenerateResponsiveLayout(
-    //        this.layouts,
-    //        this.breakpoints,
-    //        this.state.breakpoint,
-    //        this.state.breakpoint,
-    //        this.cols,
-    //        this.compactType
-    //    );
-    //    return syncLayoutWithChildren(layout, this.$slots.default, this.cols, this.compactType);
-    //},
+    layout: function layout() {
+      return this.findOrGenerateLayout(this.breakpoint, this.breakpoint);
+    },
     breakpoint: function breakpoint() {
+      if (!this.containerWidth) return null;
       var sorted = this.sortedBreakpoints,
           matching = sorted[0],
           name,
@@ -4065,7 +4045,8 @@ var gridLayout_component = normalizeComponent(
       this.containerWidth = this.$el.offsetWidth;
     }, 100),
     findOrGenerateLayout: function findOrGenerateLayout(breakpoint, lastBreakpoint) {
-      if (this.layouts[breakpoint]) return cloneLayout(this.layouts[breakpoint]);
+      if (!this.breakpoint) return null;
+      if (this.layouts[breakpoint]) return this.layouts[breakpoint];
       var layout = this.layouts[lastBreakpoint],
           cols = this.cols(breakpoint);
       var breakpointsAbove = this.sortedBreakpoints.slice(this.sortedBreakpoints.indexOf(breakpoint));
@@ -4079,17 +4060,16 @@ var gridLayout_component = normalizeComponent(
         }
       }
 
-      layout = cloneLayout(layout || []);
-      return compact(correctBounds(layout, {
+      layout = compact(correctBounds(layout || [], {
         cols: cols
       }), this.compactType, cols);
+      this.$emit('layout-changed', breakpoint, layout);
+      return layout;
     }
   },
   watch: {
     breakpoint: function breakpoint(newVal, oldVal) {
-      var layout = this.findOrGenerateLayout(newVal, oldVal);
-      this.layout = layout;
-      this.$emit('layout-changed', layout, newVal);
+      this.$emit('breakpoint-changed', newVal, oldVal);
     }
   }
 });

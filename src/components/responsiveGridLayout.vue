@@ -1,7 +1,7 @@
 
 <script>
 import gridLayout from './gridLayout';
-import { cloneLayout, compact, correctBounds, debounce } from '../utils';
+import { compact, correctBounds, debounce } from '../utils';
 
 export default {
     components: { gridLayout },
@@ -15,17 +15,13 @@ export default {
             default: () => ({ xl: 12, lg: 12, md: 6, sm: 4, xs: 3 }),
         },
         layouts: { type: Object, required: true },
-        value: { type: Object, default: () => ({}) },
         compactType: { type: String, default: 'vertical' },
         rowHeight: { type: Number, default: 50 },
         margin: { type: Array, default: () => ([10, 10]) },
         isDraggable: { type: Boolean, default: true },
         isResizable: { type: Boolean, default: true },
     },
-    data: () => ({
-        containerWidth: null,
-        layout: null,
-    }),
+    data: () => ({ containerWidth: null }),
     created() {
         window.addEventListener('resize', this.resizeHandler.bind(this));
     },
@@ -34,12 +30,11 @@ export default {
     },
     mounted() {
         this.containerWidth = this.$el.offsetWidth;
-        this.layout = this.findOrGenerateLayout(this.breakpoint, this.breakpoint);
     },
     render(h) {
         let children = [];
 
-        if (this.layout) {
+        if (this.containerWidth && this.layout) {
             let props = {
                 value: this.layout,
                 cols: this.cols(this.breakpoint),
@@ -51,6 +46,7 @@ export default {
             };
 
             let on = {
+                'input': value => this.$emit('layout-changed', this.breakpoint, value),
                 'item-resized': event => this.$emit('item-resized', event),
             };
 
@@ -63,19 +59,12 @@ export default {
             return breakpoint => this.columns[breakpoint];
         },
 
-        //layout() {
-        //    let layout = findOrGenerateResponsiveLayout(
-        //        this.layouts,
-        //        this.breakpoints,
-        //        this.state.breakpoint,
-        //        this.state.breakpoint,
-        //        this.cols,
-        //        this.compactType
-        //    );
-        //    return syncLayoutWithChildren(layout, this.$slots.default, this.cols, this.compactType);
-        //},
+        layout() {
+            return this.findOrGenerateLayout(this.breakpoint, this.breakpoint);
+        },
 
         breakpoint() {
+            if (!this.containerWidth) return null;
             let sorted = this.sortedBreakpoints,
                 matching = sorted[0],
                 name, i;
@@ -97,7 +86,8 @@ export default {
         }, 100),
 
         findOrGenerateLayout(breakpoint, lastBreakpoint) {
-            if (this.layouts[breakpoint]) return cloneLayout(this.layouts[breakpoint]);
+            if (!this.breakpoint) return null;
+            if (this.layouts[breakpoint]) return this.layouts[breakpoint];
 
             let layout = this.layouts[lastBreakpoint],
                 cols = this.cols(breakpoint);
@@ -111,15 +101,14 @@ export default {
                     break;
                 }
             }
-            layout = cloneLayout(layout || []);
-            return compact(correctBounds(layout, { cols }), this.compactType, cols);
+            layout = compact(correctBounds(layout || [], { cols }), this.compactType, cols);
+            this.$emit('layout-changed', breakpoint, layout);
+            return layout;
         },
     },
     watch: {
         breakpoint(newVal, oldVal) {
-            let layout = this.findOrGenerateLayout(newVal, oldVal);
-            this.layout = layout;
-            this.$emit('layout-changed', layout, newVal);
+            this.$emit('breakpoint-changed', newVal, oldVal);
         },
     },
 }
