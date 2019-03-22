@@ -2,7 +2,7 @@ module.exports = {
     configureWebpack: {
         output: {
             library: 'VueGridLayout',
-            libraryExport: 'default'
+            //libraryExport: 'default'
         },
     },
     css: { extract: false }

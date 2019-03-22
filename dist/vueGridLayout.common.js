@@ -4111,7 +4111,26 @@ keys_default()(components).forEach(function (name) {
 });
 
 /* harmony default export */ var src_components = (components);
+
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
+/* concated harmony reexport compact */__webpack_require__.d(__webpack_exports__, "compact", function() { return compact; });
+/* concated harmony reexport getStatics */__webpack_require__.d(__webpack_exports__, "getStatics", function() { return getStatics; });
+/* concated harmony reexport sortLayoutItems */__webpack_require__.d(__webpack_exports__, "sortLayoutItems", function() { return sortLayoutItems; });
+/* concated harmony reexport sortLayoutItemsByRowCol */__webpack_require__.d(__webpack_exports__, "sortLayoutItemsByRowCol", function() { return sortLayoutItemsByRowCol; });
+/* concated harmony reexport sortLayoutItemsByColRow */__webpack_require__.d(__webpack_exports__, "sortLayoutItemsByColRow", function() { return sortLayoutItemsByColRow; });
+/* concated harmony reexport cloneLayoutItem */__webpack_require__.d(__webpack_exports__, "cloneLayoutItem", function() { return cloneLayoutItem; });
+/* concated harmony reexport compactItem */__webpack_require__.d(__webpack_exports__, "compactItem", function() { return compactItem; });
+/* concated harmony reexport bottom */__webpack_require__.d(__webpack_exports__, "bottom", function() { return bottom; });
+/* concated harmony reexport getFirstCollision */__webpack_require__.d(__webpack_exports__, "getFirstCollision", function() { return getFirstCollision; });
+/* concated harmony reexport resolveCompactionCollision */__webpack_require__.d(__webpack_exports__, "resolveCompactionCollision", function() { return resolveCompactionCollision; });
+/* concated harmony reexport collides */__webpack_require__.d(__webpack_exports__, "collides", function() { return collides; });
+/* concated harmony reexport syncLayoutWithChildren */__webpack_require__.d(__webpack_exports__, "syncLayoutWithChildren", function() { return syncLayoutWithChildren; });
+/* concated harmony reexport getLayoutItem */__webpack_require__.d(__webpack_exports__, "getLayoutItem", function() { return getLayoutItem; });
+/* concated harmony reexport correctBounds */__webpack_require__.d(__webpack_exports__, "correctBounds", function() { return correctBounds; });
+/* concated harmony reexport getAllCollisions */__webpack_require__.d(__webpack_exports__, "getAllCollisions", function() { return getAllCollisions; });
+/* concated harmony reexport moveElement */__webpack_require__.d(__webpack_exports__, "moveElement", function() { return moveElement; });
+/* concated harmony reexport moveElementAwayFromCollision */__webpack_require__.d(__webpack_exports__, "moveElementAwayFromCollision", function() { return moveElementAwayFromCollision; });
+/* concated harmony reexport debounce */__webpack_require__.d(__webpack_exports__, "debounce", function() { return debounce; });
 
 
 /* harmony default export */ var entry_lib = __webpack_exports__["default"] = (src_components);
@@ -4149,5 +4168,5 @@ module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u20
 
 /***/ })
 
-/******/ })["default"];
+/******/ });
 //# sourceMappingURL=vueGridLayout.common.js.map

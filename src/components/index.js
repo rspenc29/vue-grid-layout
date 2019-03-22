@@ -12,3 +12,5 @@ Object.keys(components).forEach(name => {
 
 export default components;
 
+export * from '../utils';
+
