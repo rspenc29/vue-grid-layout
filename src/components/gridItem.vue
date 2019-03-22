@@ -110,14 +110,8 @@ export default {
             this.$emit('resizing', this.$vnode.key, this.value, { w, h });
         },
 
-        onResizeStop(dx, dy, dw, dh) {
-            let { w } = this.calcWH(dw, dh),
-                { x } = this.calcXY(dx, dy);
-
-            w = Math.min(w, this.cols - x);
-            w = Math.max(w, 1);
+        onResizeStop(/*dx, dy, dw, dh*/) {
             this.state.resizing = null;
-
             this.$emit('resizestop', this.$vnode.key, this.value, {
                 left: this.position.x,
                 top: this.position.y,

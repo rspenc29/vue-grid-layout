@@ -3167,14 +3167,9 @@ var VueDraggableResizable_umd_min_default = /*#__PURE__*/__webpack_require__.n(V
         h: h
       });
     },
-    onResizeStop: function onResizeStop(dx, dy, dw, dh) {
-      var _this$calcWH2 = this.calcWH(dw, dh),
-          w = _this$calcWH2.w,
-          _this$calcXY3 = this.calcXY(dx, dy),
-          x = _this$calcXY3.x;
-
-      w = Math.min(w, this.cols - x);
-      w = Math.max(w, 1);
+    onResizeStop: function onResizeStop()
+    /*dx, dy, dw, dh*/
+    {
       this.state.resizing = null;
       this.$emit('resizestop', this.$vnode.key, this.value, {
         left: this.position.x,
@@ -3674,6 +3669,7 @@ function debounce(func, wait, immediate) {
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/gridLayout.vue?vue&type=script&lang=js&
 
 
+
 //
 
 
@@ -3864,6 +3860,16 @@ function debounce(func, wait, immediate) {
     // @todo Use a computed property
     value: function value(newVal) {
       this.state.layout = syncLayoutWithChildren(newVal, this.$slots.default, this.cols, this.compactType);
+    },
+    colWidth: function colWidth() {
+      var _this = this;
+
+      // force a resize event when colWidth changes
+      this.$nextTick(function () {
+        return _this.$refs.items.forEach(function (item) {
+          return item.onResizeStop();
+        });
+      });
     }
   }
 });

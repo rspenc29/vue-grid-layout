@@ -158,6 +158,10 @@ export default {
         value(newVal) {
             this.state.layout = syncLayoutWithChildren(newVal, this.$slots.default, this.cols, this.compactType);
         },
+        colWidth() {
+            // force a resize event when colWidth changes
+            this.$nextTick(() => this.$refs.items.forEach(item => item.onResizeStop()));
+        },
     },
 }
 </script>
