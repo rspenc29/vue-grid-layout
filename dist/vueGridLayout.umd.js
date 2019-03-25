@@ -3114,7 +3114,8 @@ var VueDraggableResizable_umd_min_default = /*#__PURE__*/__webpack_require__.n(V
     }
   },
   methods: {
-    onDragStart: function onDragStart() {
+    onDragStart: function onDragStart(event) {
+      event.preventDefault();
       var parent = this.$parent.$el,
           parentRect = parent.getBoundingClientRect(),
           clientRect = this.$el.getBoundingClientRect();

@@ -72,7 +72,8 @@ export default {
         },
     },
     methods: {
-        onDragStart() {
+        onDragStart(event) {
+            event.preventDefault();
             let parent = this.$parent.$el,
                 parentRect = parent.getBoundingClientRect(),
                 clientRect = this.$el.getBoundingClientRect();
