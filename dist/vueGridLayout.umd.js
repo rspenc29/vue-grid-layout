@@ -3059,14 +3059,12 @@ var VueDraggableResizable_umd_min_default = /*#__PURE__*/__webpack_require__.n(V
     var context = {
       props: _objectSpread({}, this.position, {
         className: 'grid-item',
-        draggable: !this.isPlaceholder && this.isDraggable,
-        resizable: !this.isPlaceholder && this.isResizable,
-        active: !this.isPlaceholder && this.isResizable,
         preventDeactivation: !this.isPlaceholder && this.isResizable,
         handles: this.isResizable ? ['br'] : [],
-        onDragStart: this.onDragStart,
-        onResizeStart: this.onResizeStart,
-        class: this.class
+        class: this.class,
+        draggable: false,
+        resizable: false,
+        active: false
       })
     };
 
@@ -3077,6 +3075,16 @@ var VueDraggableResizable_umd_min_default = /*#__PURE__*/__webpack_require__.n(V
         dragstop: this.onDragStop,
         resizestop: this.onResizeStop
       };
+
+      if (this.isDraggable) {
+        context.props = _objectSpread({}, context.props, {
+          onDragStart: this.onDragStart,
+          onResizeStart: this.onResizeStart,
+          draggable: true,
+          resizable: true,
+          active: true
+        });
+      }
     }
 
     return h(VueDraggableResizable_umd_min_default.a, context, [this.$slots.default]);

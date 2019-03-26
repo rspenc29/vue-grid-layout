@@ -21,14 +21,12 @@ export default {
             props: {
                 ...this.position,
                 className: 'grid-item',
-                draggable: !this.isPlaceholder && this.isDraggable,
-                resizable: !this.isPlaceholder && this.isResizable,
-                active: !this.isPlaceholder && this.isResizable,
                 preventDeactivation: !this.isPlaceholder && this.isResizable,
                 handles: this.isResizable ? ['br'] : [],
-                onDragStart: this.onDragStart,
-                onResizeStart: this.onResizeStart,
                 class: this.class,
+                draggable: false,
+                resizable: false,
+                active: false,
             },
         };
 
@@ -39,6 +37,17 @@ export default {
                 dragstop: this.onDragStop,
                 resizestop: this.onResizeStop,
             };
+
+            if (this.isDraggable) {
+                context.props = {
+                    ...context.props,
+                    onDragStart: this.onDragStart,
+                    onResizeStart: this.onResizeStart,
+                    draggable: true,
+                    resizable: true,
+                    active: true,
+                };
+            }
         }
 
         return h(VueDraggableResizable, context, [this.$slots.default]);
